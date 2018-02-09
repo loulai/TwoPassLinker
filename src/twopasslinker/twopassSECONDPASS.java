@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
-public class twopassNEW {
+public class twopassSECONDPASS {
 
 	public static void main(String[] args) {
 		File file = new File("src/input-1");
@@ -16,7 +16,7 @@ public class twopassNEW {
 		int opcode;
 		HashMap<String, Integer> defTable = new HashMap<String, Integer>();
 		ArrayList<String> programTable = new ArrayList<>();
-		
+	
 		Scanner sc = null; 
 		try {sc = new Scanner(file);} catch (FileNotFoundException e) {}
 		
@@ -32,11 +32,15 @@ public class twopassNEW {
 			// 2) Use table
 			opcode = sc.nextInt();
 			System.out.printf("(%d) ", opcode);
-		
+			HashMap<Integer, String> useTable = new HashMap<Integer, String>();
+			
 			for(int i = 0; i < opcode; i++) {
-				System.out.print(sc.next() + "  "); // just increment n times. Likely need to change later.
+				String symbol = sc.next();
+				System.out.print(symbol + "  "); // just increment n times. Likely need to change later.
+				useTable.put(i, symbol);
 			}
 			System.out.println();
+			System.out.println("\t" + useTable.toString());
 			
 			// 3) Program Text
 			opcode = sc.nextInt();
@@ -47,6 +51,35 @@ public class twopassNEW {
 		System.out.println("\n=== FIRST PASS ===");
 		System.out.println(defTable.toString());
 		System.out.println(programTable + "\n==================");
+		
+		/* ------------SECOND PASS----------------- */
+		Scanner sc2 = null; 
+		try {sc2 = new Scanner(file);} catch (FileNotFoundException e) {}
+		sc2.nextInt(); // num total modules
+		
+		while(sc2.hasNext()) {
+			opcode = sc2.nextInt();
+			for(int i = 0; i < opcode; i++) {sc2.next(); sc2.nextInt();} // Definitions. Flying through
+		
+			// 2) Use table
+			opcode = sc2.nextInt();
+			System.out.printf("(%d) ", opcode);
+			HashMap<Integer, String> useTable = new HashMap<Integer, String>();
+			
+			for(int i = 0; i < opcode; i++) {
+				String symbol = sc2.next();
+				System.out.print(symbol + "  "); // just increment n times. Likely need to change later.
+				useTable.put(i, symbol);
+			}
+			System.out.println();
+			System.out.println("\t" + useTable.toString());
+			
+			// 3) Program Text
+			opcode = sc2.nextInt();
+			for(int i = 0; i < opcode; i++) {sc2.next(); sc2.nextInt();} // Again, Flying through
+			
+		}
+		
 	}
 	
 	private static void processDefinitions(int opcode, Scanner sc, int currentBase, HashMap table) {
@@ -82,4 +115,5 @@ public class twopassNEW {
 			System.out.printf("\t%3s %4d\n", type, absValue);
 		}
 	}
+
 }

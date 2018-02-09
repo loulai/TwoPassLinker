@@ -13,13 +13,9 @@ public class twopassNEW {
 		
 		// Initializing variables
 		int currentBase = 0;
-		int[] base = new int[0];
-		
 		int opcode;
-	
 		HashMap<String, Integer> defTable = new HashMap<String, Integer>();
 		ArrayList<String> programTable = new ArrayList<>();
-		//HashMap<String, Integer> programText = new HashMap<String, Integer>();
 		
 		Scanner sc = null; 
 		try {sc = new Scanner(file);} catch (FileNotFoundException e) {}
@@ -45,33 +41,44 @@ public class twopassNEW {
 			// 3) Program Text
 			opcode = sc.nextInt();
 			processProgramText(opcode, sc, currentBase, programTable);
+			currentBase = currentBase + opcode; // increment base
+			System.out.printf(">>>>>>>>>>> current base: %d\n" , currentBase);
 		}
 		System.out.println("\n=== FIRST PASS ===");
 		System.out.println(defTable.toString());
-		System.out.println(programTable + "\n=====================");
-		
+		System.out.println(programTable + "\n==================");
 	}
 	
 	private static void processDefinitions(int opcode, Scanner sc, int currentBase, HashMap table) {
 		System.out.printf("opCode (%d)\n", opcode);
 		
 		for(int i = 0; i < opcode; i++) {
-			String def = sc.next(); // definition
-			int absValue = sc.nextInt() + currentBase; // absolute value
+			String def = sc.next(); // definition 
+			int relAddress = sc.nextInt();
+			int absValue = relAddress + currentBase; // absolute value
+			//System.out.printf("relative address: %d, current base: %d\n", relAddress, currentBase);
 			table.put(def, absValue);
-			System.out.printf("\t%3s = %d\n", def, absValue);
+			System.out.printf("\t%3s = %d\n", def, relAddress);
 		}
 	}
 	
 	private static void processProgramText(int opcode, Scanner sc, int currentBase, ArrayList programTable) {
 		System.out.printf("opCode (%d)\n", opcode);
-		
+		// System.out.printf(">>>>>>>>>>>>currentBase (%d)\n", currentBase); //DB
+		int absValue = 0;
 		for(int i = 0; i < opcode; i++) {
-			String def = sc.next(); // definition
-			int absValue = sc.nextInt() + currentBase; // absolute value
-			programTable.add(def);
+			String type = sc.next(); // type: R, E or I
+			
+			if(type.equals("R")) {
+				absValue = sc.nextInt() + currentBase; 
+			} else if (type.equals("E")) {
+				absValue = sc.nextInt(); 
+			} else {
+				absValue = sc.nextInt();
+			}
+			programTable.add(type);
 			programTable.add(absValue);
-			System.out.printf("\t%3s %4d\n", def, absValue);
+			System.out.printf("\t%3s %4d\n", type, absValue);
 		}
 	}
 }

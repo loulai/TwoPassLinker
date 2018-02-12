@@ -1,0 +1,54 @@
+@1 @2 no errors
+
+@3
+Warning: X12 was defined in module 0 but never used.
+
+@4
+Error: variable multiply defined; first value used.
+
+Error: Absolute address exceeds machine size; zero used.
+
+@5
+Warning: X31 was defined in module 2 but never used. 	
+Error: X21 is not defined; zero used.
+
+Error: Absolute address exceeds machine size; zero used.
+
+@6
+Warning: X31 was defined in module 2 but never used.
+
+Error: Absolute address exceeds machine size; zero used.
+Error: Relative address exceeds module size; zero used.
+
+@7
+Warning: X31 was defined in module 2 but never used.
+
+Error: External address exceeds length of use list; treated as immediate.
+Error: Absolute address exceeds machine size; zero used.
+Error: Relative address exceeds module size; zero used.
+
+
+@8
+Warning: In module 0 X21 appeared in the use list but was not actually used.
+
+@9
+Warning: X31 was defined in module 2 but never used.
+Warning: In module 0 X21 appeared in the use list but was not actually used.
+
+Error: In module 2 the def of X31 exceeds the module size; zero (relative) used.
+
+===================================================================================
+not defined (error, use 0)
+
+====================================================================================
+defined but never used (warning)
+mutiply defined (error)
+
+in uselist but never used (warning)
+
+absolute address > machine size (error, use 0)
+relative address > module size (error, use 0)
+external address > length of use list (error, treat as immediate)
+
+definition > module size (error, use 0)
+

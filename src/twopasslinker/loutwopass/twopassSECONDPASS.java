@@ -1,4 +1,4 @@
-package twopasslinker;
+//package twopasslinker;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -11,15 +11,15 @@ public class twopassSECONDPASS {
 
 	public static void main(String[] args) {
 		
-		/*
+		
 		if(args.length == 0) {
 			System.out.println("ERROR: program expects file name as argument");
 			System.exit(0);
 		} 
 	
 		File file = new File(args[0]);	
-		*/
-		File file = new File("src/input-6");
+		
+		//File file = new File("src/input-1");
 	
 		// Initializing variables
 		int currentBase = 0;
@@ -43,14 +43,14 @@ public class twopassSECONDPASS {
 			
 			// 2) Use table
 			opcode = sc.nextInt();
-			//System.out.printf("(%d) ", opcode);
+			System.out.printf("(%d) ", opcode);
 			
 			
 			for(int i = 0; i < opcode; i++) {
 				String symbol = sc.next();
-				//System.out.print(symbol + "  "); // just increment n times
+				System.out.print(symbol + "  "); // just increment n times. Likely need to change later.
 			}
-			//System.out.println();
+			System.out.println();
 			
 			// 3) Program Text
 			opcode = sc.nextInt(); //module size
@@ -87,7 +87,7 @@ public class twopassSECONDPASS {
 				useTable.put(i, symbol);
 			}
 			System.out.println();
-			//System.out.println("\t" + useTable.toString());
+			System.out.println("\t" + useTable.toString());
 			
 			// 3) Program Text
 			opcode = sc2.nextInt();
@@ -101,37 +101,37 @@ public class twopassSECONDPASS {
 	private static HashMap<String, Integer> processDefinitions(int opcode, Scanner sc, int currentBase, HashMap table, String s, ListIterator<Integer> moduleSizeIter) {
 		System.out.printf("(%d) ", opcode);
 		
-		int currentModuleSize = 0;
-		if(s == "secondpass") currentModuleSize = moduleSizeIter.next();
-		
 		for(int i = 0; i < opcode; i++) {
 			String def = sc.next(); // definition 
 			int relAddress = sc.nextInt();
 			int absValue = relAddress + currentBase; // absolute value
 			//System.out.printf("relative address: %d, current base: %d\n", relAddress, currentBase);
-		
+			
 			if (s == "firstpass") {
 				if(table.containsKey(def)) {
 					System.out.println("Error: variable "+ def +" multiply defined; first value used.");
+					System.out.printf("%s = FIRST REL ADDRESS", def);
 					//table.put(def, absValue);
 				} else { // normal
 					table.put(def, absValue);
-					//System.out.printf("%s = %d", def, relAddress);
+					System.out.printf("%s = %d", def, relAddress);
 				}
 			} else if (s == "secondpass") {
 				if(!table.containsKey(def)) {
 					System.out.println("Error: " + def + " is not defined; zero used.");
-				} else if((int) table.get(def) > currentModuleSize) {
-					table.put(def, 0);
-					System.out.printf("%s = %d", def, 0);
-					System.out.println("\nError: Relative address exceeds module size; zero used.");
+					
 				} else {
 					table.put(def, absValue);
 					System.out.printf("%s = %d", def, relAddress);
 				}
 			}
+			 
 		}
-		
+		if(s == "secondpass") {
+			//moduleSizeIter.next();
+			int currentModuleSize = moduleSizeIter.next();
+			System.out.println("\n>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> "+ currentModuleSize);
+		}
 		
 		System.out.println();
 		return table;
@@ -152,14 +152,18 @@ public class twopassSECONDPASS {
 				} else {
 					int relAddress = sc.nextInt();
 					int instruction = relAddress % 1000; // e.g. 0 or 1
+					
+					//System.out.printf("============== > instruction: %d\n", instruction);
+		
 					String symbol = useTable.get(instruction); // from {0:z, 1:xy} return xy
-	
+					//System.out.printf("============== > symbol: %s\n", symbol);
 					int addition = 0; // used if symbol X21 not defined
 					if (defTable.get(symbol) == null) {
-						
+						//System.out.println("Error: " + symbol + " is not defined; zero used.");
 					} else{
 						addition = defTable.get(symbol); // from {z=15, xy=2} return 2
 					};
+					//System.out.printf("============== > addition: %s\n", addition);
 					
 					absValue = (relAddress - instruction) + addition;
 				}
